@@ -1,7 +1,9 @@
 <?php
 require_once('Cliente.php');
+require_once('BancoClientes.php');
 
-$clientes = new Cliente();
+$clientes = new BancoClientes();
+
 $clientes->addCliente(new Cliente(8,'Teste 8','123.123.123.18', 'rua da casa 8', '6599434343'));
 $clientes->addCliente(new Cliente(2,'Teste 2','123.123.123.12', 'rua da casa 2', '6599434343'));
 $clientes->addCliente(new Cliente(3,'Teste 3','123.123.123.13', 'rua da casa 3', '6599434343'));
@@ -13,10 +15,10 @@ $clientes->addCliente(new Cliente(1,'Teste 1','123.123.123.11', 'rua da casa 1',
 $clientes->addCliente(new Cliente(9,'Teste 9','123.123.123.19', 'rua da casa 9', '6599434343'));
 $clientes->addCliente(new Cliente(10,'Teste 10','123.123.123.10', 'rua da casa 10', '6599434343'));
 
-if($_GET['ordena'] == 'crescente')
+if(isset($_GET['ordena']) && $_GET['ordena'] == 'crescente')
     $clientes->clientesCrescente();
 
-if($_GET['ordena'] == 'decrescente')
+if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
     $clientes->clientesDescrescente();
 
 ?>
@@ -61,7 +63,7 @@ if($_GET['ordena'] == 'decrescente')
             </tr>
         </thead>
         <tbody>
-            <?php foreach($clientes->allClientes() as $cliente): ?>
+            <?php foreach($clientes->allClientes() as $key => $cliente): ?>
             <tr>
                 <td><?php echo $cliente->id; ?></td>
                 <td><?php echo $cliente->nome; ?></td>
