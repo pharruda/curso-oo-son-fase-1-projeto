@@ -1,12 +1,31 @@
 <?php
-require_once('Cliente.php');
-require_once('ClienteJuridico.php');
-require_once('ClienteFisico.php');
-require_once('BancoClientes.php');
 
-$clientes = new BancoClientes();
+define('CLASS_DIR', 'src/');
+set_include_path(get_include_path().PATH_SEPARATOR.CLASS_DIR);
 
-$fisico = new ClienteFisico();
+/**
+ * a funcão spl_autoload_register() não queria funciona sem parametro, então eu coloquei o código do
+ * php-fig e deu certo.
+ **/
+
+spl_autoload_register(function($className)
+{
+    $className = ltrim($className, '\\');
+    $fileName  = '';
+    $namespace = '';
+    if ($lastNsPos = strrpos($className, '\\')) {
+        $namespace = substr($className, 0, $lastNsPos);
+        $className = substr($className, $lastNsPos + 1);
+        $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+    }
+    $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+
+    require $fileName;
+});
+
+$clientes = new SON\Cliente\BancoClientes();
+
+$fisico = new SON\Cliente\ClienteFisico();
 $fisico->setNome("Paulo");
 $fisico->setId(1);
 $fisico->setTipo(1);
@@ -19,7 +38,7 @@ $fisico->setGrauImportancia(5);
 
 $clientes->addCliente($fisico);
 
-$fisico = new ClienteFisico();
+$fisico = new SON\Cliente\ClienteFisico();
 $fisico->setNome("Teste 2");
 $fisico->setId(2);
 $fisico->setTipo(1);
@@ -31,7 +50,7 @@ $fisico->setGrauImportancia(3);
 
 $clientes->addCliente($fisico);
 
-$juridico = new ClienteJuridico();
+$juridico = new SON\Cliente\ClienteJuridico();
 $juridico->setNome("Teste 2");
 $juridico->setId(3);
 $juridico->setTipo(2);
