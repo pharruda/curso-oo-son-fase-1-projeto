@@ -1,19 +1,47 @@
 <?php
 require_once('Cliente.php');
+require_once('ClienteJuridico.php');
+require_once('ClienteFisico.php');
 require_once('BancoClientes.php');
 
 $clientes = new BancoClientes();
 
-$clientes->addCliente(new Cliente(8,'Teste 8','123.123.123.18', 'rua da casa 8', '6599434343'));
-$clientes->addCliente(new Cliente(2,'Teste 2','123.123.123.12', 'rua da casa 2', '6599434343'));
-$clientes->addCliente(new Cliente(3,'Teste 3','123.123.123.13', 'rua da casa 3', '6599434343'));
-$clientes->addCliente(new Cliente(4,'Teste 4','123.123.123.14', 'rua da casa 4', '6599434343'));
-$clientes->addCliente(new Cliente(6,'Teste 6','123.123.123.16', 'rua da casa 6', '6599434343'));
-$clientes->addCliente(new Cliente(5,'Teste 5','123.123.123.15', 'rua da casa 5', '6599434343'));
-$clientes->addCliente(new Cliente(7,'Teste 7','123.123.123.17', 'rua da casa 7', '6599434343'));
-$clientes->addCliente(new Cliente(1,'Teste 1','123.123.123.11', 'rua da casa 1', '6599434343'));
-$clientes->addCliente(new Cliente(9,'Teste 9','123.123.123.19', 'rua da casa 9', '6599434343'));
-$clientes->addCliente(new Cliente(10,'Teste 10','123.123.123.10', 'rua da casa 10', '6599434343'));
+$fisico = new ClienteFisico();
+$fisico->setNome("Paulo");
+$fisico->setId(1);
+$fisico->setTipo(1);
+$fisico->setCpf('0606060606060');
+$fisico->setEndereco('Teste Endereco');
+$fisico->setTelefone('6599999999');
+$fisico->setEnderecoCobranca('rua do pagamento físico 1');
+$fisico->setGrauImportancia(5);
+
+
+$clientes->addCliente($fisico);
+
+$fisico = new ClienteFisico();
+$fisico->setNome("Teste 2");
+$fisico->setId(2);
+$fisico->setTipo(1);
+$fisico->setCpf('0606060606060');
+$fisico->setEndereco('Teste Endereco 2');
+$fisico->setTelefone('6599999999');
+$fisico->setEnderecoCobranca('rua do pagamento físico 2');
+$fisico->setGrauImportancia(3);
+
+$clientes->addCliente($fisico);
+
+$juridico = new ClienteJuridico();
+$juridico->setNome("Teste 2");
+$juridico->setId(3);
+$juridico->setTipo(2);
+$juridico->setCnpj('1111111111111');
+$juridico->setEndereco('Teste Endereco 2');
+$juridico->setTelefone('6599999999');
+$juridico->setEnderecoCobranca('rua do pagamento juridico');
+$juridico->setGrauImportancia(2);
+
+$clientes->addCliente($juridico);
 
 if(isset($_GET['ordena']) && $_GET['ordena'] == 'crescente')
     $clientes->clientesCrescente();
@@ -57,7 +85,7 @@ if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
             <tr>
                 <th>id</th>
                 <th>Nome</th>
-                <th>Cpf</th>
+                <th>Tipo</th>
                 <th>Endereço</th>
                 <th>Telefone</th>
                 <th>Ações</th>
@@ -66,11 +94,15 @@ if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
         <tbody>
             <?php foreach($clientes->allClientes() as $key => $cliente): ?>
             <tr>
-                <td><?php echo $cliente->id; ?></td>
-                <td><?php echo $cliente->nome; ?></td>
-                <td><?php echo $cliente->cpf; ?></td>
-                <td><?php echo $cliente->endereco; ?></td>
-                <td><?php echo $cliente->telefone; ?></td>
+                <td><?php echo $cliente->getId(); ?></td>
+                <td><?php echo $cliente->getNome(); ?></td>
+                <?php if($cliente->getTipo() == 1): ?>
+                    <td>Pessoa Física</td>
+                <?php elseif($cliente->getTipo() == 2):?>
+                    <td>Pessoa Juridica</td>
+                <?php endif; ?>
+                <td><?php echo $cliente->getEndereco(); ?></td>
+                <td><?php echo $cliente->getTelefone(); ?></td>
                 <td>
                    <a class="btn btn-primary btn-sm"  href="index.php?id=<?php echo $key; ?>">
                         Ver Informações
@@ -85,13 +117,19 @@ if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
     <?php $cli = $clientes->showCliente($_GET['id']); ?>
     <div class="container">
         <div class="panel panel-success">
-            <div class="panel-heading">Informações do Cliente : <?php echo $cli->nome; ?></div>
+            <div class="panel-heading">Informações do Cliente : <?php echo $cli->getNome(); ?></div>
             <div class="panel-body">
-                <p><strong>Id :</strong> <?php echo $cli->id; ?></p>
-                <p><strong>Nome : </strong><?php echo $cli->nome; ?></p>
-                <p><strong>CPF: </strong><?php echo $cli->cpf; ?></p>
-                <p><strong>Endereço :</strong> <?php echo $cli->endereco; ?></p>
-                <p><strong>Telefone :</strong> <?php echo $cli->telefone; ?></p>
+                <p><strong>Id :</strong> <?php echo $cli->getId(); ?></p>
+                <p><strong>Nome : </strong><?php echo $cli->getNome(); ?></p>
+                <?php if($cli->getTipo() == 1): ?>
+                    <p><strong>CPF: </strong><?php echo $cli->getCpf(); ?></p>
+                <?php elseif($cli->getTipo() == 2):?>
+                    <p><strong>CNPJ: </strong><?php echo $cli->getCnpj(); ?></p>
+                <?php endif; ?>
+                <p><strong>Endereço :</strong> <?php echo $cli->getEndereco(); ?></p>
+                <p><strong>Telefone :</strong> <?php echo $cli->getTelefone(); ?></p>
+                <p><strong>Grau Importância :</strong> <?php echo $cli->getGrauImportancia(); ?> estrelas</p>
+                <p><strong>Endereço p/ cobrança :</strong> <?php echo $cli->getEnderecoCobranca(); ?></p>
             </div>
         </div>
     </div>

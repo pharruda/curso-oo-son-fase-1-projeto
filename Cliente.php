@@ -1,20 +1,130 @@
 <?php
+require_once('ICliente.php');
 
-
-class Cliente
+class Cliente implements ICliente
 {
-    public $id;
-    public $nome;
-    public $cpf;
-    public $endereco;
-    public $telefone;
+    private $id;
+    private $nome;
+    private $endereco;
+    private $telefone;
+    private $tipo;
+    private $grauImportancia;
+    private $enderecoCobranca;
 
-    public function __construct($id, $nome, $cpf, $endereco, $telefone)
+    /**
+     * @return mixed
+     */
+    public function getEnderecoCobranca()
     {
-        $this->id       = $id;
-        $this->nome     = $nome;
-        $this->cpf      = $cpf;
-        $this->endereco = $endereco;
-        $this->telefone = $telefone;
+        return $this->enderecoCobranca;
     }
+
+    /**
+     * @param mixed $enderecoCobranca
+     */
+    public function setEnderecoCobranca($enderecoCobranca)
+    {
+        $this->enderecoCobranca = $enderecoCobranca;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * @param mixed $tipo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return  $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNome()
+    {
+        return $this->nome;
+    }
+
+    /**
+     * @param mixed $nome
+     */
+    public function setNome($nome)
+    {
+        $this->nome = $nome;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEndereco()
+    {
+        return $this->endereco;
+    }
+
+    /**
+     * @param mixed $endereco
+     */
+    public function setEndereco($endereco)
+    {
+        $this->endereco = $endereco;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTelefone()
+    {
+        return $this->telefone;
+    }
+
+    /**
+     * @param mixed $telefone
+     */
+    public function setTelefone($telefone)
+    {
+        $this->telefone = $telefone;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGrauImportancia()
+    {
+        return $this->grauImportancia;
+    }
+
+    /**
+     * @param mixed $grauImportancia
+     */
+    public function setGrauImportancia($grauImportancia)
+    {
+        $this->grauImportancia = $grauImportancia;
+    }
+
 }

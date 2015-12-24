@@ -8,7 +8,7 @@ class BancoClientes
      * método onde adiciona o cliente
      * @param $cliente
      */
-    public function addCliente(Cliente $cliente)
+    public function addCliente($cliente)
     {
         $this->clientes[] = $cliente;
     }
