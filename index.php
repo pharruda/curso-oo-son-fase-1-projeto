@@ -60,6 +60,7 @@ if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
                 <th>Cpf</th>
                 <th>Endereço</th>
                 <th>Telefone</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -70,15 +71,40 @@ if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
                 <td><?php echo $cliente->cpf; ?></td>
                 <td><?php echo $cliente->endereco; ?></td>
                 <td><?php echo $cliente->telefone; ?></td>
+                <td>
+                   <a class="btn btn-primary btn-sm"  href="index.php?id=<?php echo $key; ?>">
+                        Ver Informações
+                   </a>
+                </td>
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 </div>
+<?php if(isset($_GET['id'])): ?>
+    <?php $cli = $clientes->showCliente($_GET['id']); ?>
+    <div class="container">
+        <div class="panel panel-success">
+            <div class="panel-heading">Informações do Cliente : <?php echo $cli->nome; ?></div>
+            <div class="panel-body">
+                <p><strong>Id :</strong> <?php echo $cli->id; ?></p>
+                <p><strong>Nome : </strong><?php echo $cli->nome; ?></p>
+                <p><strong>CPF: </strong><?php echo $cli->cpf; ?></p>
+                <p><strong>Endereço :</strong> <?php echo $cli->endereco; ?></p>
+                <p><strong>Telefone :</strong> <?php echo $cli->telefone; ?></p>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script>
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').focus()
+    })
+</script>
 </body>
 </html>

@@ -40,4 +40,14 @@ class BancoClientes
         return arsort($this->clientes);
     }
 
+    /**
+     * Mostra apenas um cliente
+     * @param $key
+     * @return mixed
+     */
+    public function showCliente($key)
+    {
+        return $this->clientes[$key];
+    }
+
 }
