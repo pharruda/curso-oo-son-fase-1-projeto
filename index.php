@@ -25,49 +25,6 @@ spl_autoload_register(function($className)
 
 $clientes = new SON\Cliente\BancoClientes();
 
-$fisico = new SON\Cliente\ClienteFisico();
-$fisico->setNome("Paulo");
-$fisico->setId(1);
-$fisico->setTipo(1);
-$fisico->setCpf('0606060606060');
-$fisico->setEndereco('Teste Endereco');
-$fisico->setTelefone('6599999999');
-$fisico->setEnderecoCobranca('rua do pagamento físico 1');
-$fisico->setGrauImportancia(5);
-
-
-$clientes->addCliente($fisico);
-
-$fisico = new SON\Cliente\ClienteFisico();
-$fisico->setNome("Teste 2");
-$fisico->setId(2);
-$fisico->setTipo(1);
-$fisico->setCpf('0606060606060');
-$fisico->setEndereco('Teste Endereco 2');
-$fisico->setTelefone('6599999999');
-$fisico->setEnderecoCobranca('rua do pagamento físico 2');
-$fisico->setGrauImportancia(3);
-
-$clientes->addCliente($fisico);
-
-$juridico = new SON\Cliente\ClienteJuridico();
-$juridico->setNome("Teste 2");
-$juridico->setId(3);
-$juridico->setTipo(2);
-$juridico->setCnpj('1111111111111');
-$juridico->setEndereco('Teste Endereco 2');
-$juridico->setTelefone('6599999999');
-$juridico->setEnderecoCobranca('rua do pagamento juridico');
-$juridico->setGrauImportancia(2);
-
-$clientes->addCliente($juridico);
-
-if(isset($_GET['ordena']) && $_GET['ordena'] == 'crescente')
-    $clientes->clientesCrescente();
-
-if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
-    $clientes->clientesDescrescente();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -95,8 +52,6 @@ if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
 </head>
 <body>
 <div class="container top">
-    <a class="btn btn-primary" href="index.php?ordena=crescente" role="button">Ordenar de forma crescente</a>
-    <a class="btn btn-primary" href="index.php?ordena=decrescente" role="button">Ordenar de forma descrescente</a>
     <br>
     <br>
     <table class="table table-striped table-bordered">
@@ -111,19 +66,19 @@ if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
             </tr>
         </thead>
         <tbody>
-            <?php foreach($clientes->allClientes() as $key => $cliente): ?>
+            <?php foreach($clientes->flush() as $cliente): ?>
             <tr>
-                <td><?php echo $cliente->getId(); ?></td>
-                <td><?php echo $cliente->getNome(); ?></td>
-                <?php if($cliente->getTipo() == 1): ?>
+                <td><?php echo $cliente['id']; ?></td>
+                <td><?php echo $cliente['nome']; ?></td>
+                <?php if($cliente['tipo'] == 1): ?>
                     <td>Pessoa Física</td>
-                <?php elseif($cliente->getTipo() == 2):?>
+                <?php elseif($cliente['tipo'] == 2):?>
                     <td>Pessoa Juridica</td>
                 <?php endif; ?>
-                <td><?php echo $cliente->getEndereco(); ?></td>
-                <td><?php echo $cliente->getTelefone(); ?></td>
+                <td><?php echo $cliente['endereco']; ?></td>
+                <td><?php echo $cliente['telefone']; ?></td>
                 <td>
-                   <a class="btn btn-primary btn-sm"  href="index.php?id=<?php echo $key; ?>">
+                   <a class="btn btn-primary btn-sm"  href="index.php?id=<?php echo $cliente['id']; ?>">
                         Ver Informações
                    </a>
                 </td>
@@ -133,23 +88,24 @@ if(isset($_GET['ordena']) && $_GET['ordena'] == 'decrescente')
     </table>
 </div>
 <?php if(isset($_GET['id'])): ?>
-    <?php $cli = $clientes->showCliente($_GET['id']); ?>
     <div class="container">
         <div class="panel panel-success">
-            <div class="panel-heading">Informações do Cliente : <?php echo $cli->getNome(); ?></div>
+            <?php foreach($clientes->showCliente($_GET['id']) as $cli):?>
+            <div class="panel-heading">Informações do Cliente : <?php echo $cli['nome']; ?></div>
             <div class="panel-body">
-                <p><strong>Id :</strong> <?php echo $cli->getId(); ?></p>
-                <p><strong>Nome : </strong><?php echo $cli->getNome(); ?></p>
-                <?php if($cli->getTipo() == 1): ?>
-                    <p><strong>CPF: </strong><?php echo $cli->getCpf(); ?></p>
-                <?php elseif($cli->getTipo() == 2):?>
-                    <p><strong>CNPJ: </strong><?php echo $cli->getCnpj(); ?></p>
+                <p><strong>Id :</strong> <?php echo $cli['id']; ?></p>
+                <p><strong>Nome : </strong><?php echo $cli['nome']; ?></p>
+                <?php if($cli['tipo'] == 1): ?>
+                    <p><strong>CPF: </strong><?php echo $cli['cpf_cnpj']; ?></p>
+                <?php elseif($cli['tipo'] == 2):?>
+                    <p><strong>CNPJ: </strong><?php echo $cli['cpf_cnpj']; ?></p>
                 <?php endif; ?>
-                <p><strong>Endereço :</strong> <?php echo $cli->getEndereco(); ?></p>
-                <p><strong>Telefone :</strong> <?php echo $cli->getTelefone(); ?></p>
-                <p><strong>Grau Importância :</strong> <?php echo $cli->getGrauImportancia(); ?> estrelas</p>
-                <p><strong>Endereço p/ cobrança :</strong> <?php echo $cli->getEnderecoCobranca(); ?></p>
+                <p><strong>Endereço :</strong> <?php echo $cli['endereco']; ?></p>
+                <p><strong>Telefone :</strong> <?php echo $cli['telefone']; ?></p>
+                <p><strong>Grau Importância :</strong> <?php echo $cli['grau_importancia'];; ?> estrelas</p>
+                <p><strong>Endereço p/ cobrança :</strong> <?php echo $cli['endereco_cobranca'];; ?></p>
             </div>
+            <?php endforeach; ?>
         </div>
     </div>
 <?php endif; ?>

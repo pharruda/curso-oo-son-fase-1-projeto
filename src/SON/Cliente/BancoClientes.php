@@ -4,43 +4,45 @@ namespace SON\Cliente;
 
 class BancoClientes
 {
-    public $clientes = array();
+    private $pdo;
 
-    /**
-     * método onde adiciona o cliente
-     * @param $cliente
-     */
-    public function addCliente($cliente)
+    public function __construct()
     {
-        $this->clientes[] = $cliente;
+        try{
+            $this->pdo = new \PDO("mysql:host=localhost;dbname=dbteste", "root", "123");
+        }catch (\PDOException $e) {
+            return $e->getMessage();
+        }
     }
 
-    /**
-     * Método onde retorna todos os clientes
-     * @return array
-     */
-    public function allClientes()
+    public function persist(Cliente $cliente)
     {
-        return $this->clientes;
+        try {
+            $stmt = $this->pdo->prepare("INSERT INTO Cliente(nome,endereco, telefone, tipo, grau_importancia, endereco_cobranca)
+                                        VALUES (:nome, :endereco, :telefone, :tipo, :grau_importancia, :endereco_cobraca)");
+            $stmt->bindParam(':nome', $cliente->getNome());
+            $stmt->bindParam(':endereco', $cliente->getEndereco());
+            $stmt->bindParam(':telefone', $cliente->getTelefone());
+            $stmt->bindParam(':tipo', $cliente->getTipo());
+            $stmt->bindParam(':grau_importancia', $cliente->getGrauImportancia());
+            $stmt->bindParam(':endereco_cobraca', $cliente->getGrauImportancia());
+            $stmt->execute();
+        }catch (\PDOException $e) {
+            return $e->getMessage();
+        }
     }
 
-    /**
-     * Ordena em forma crescente
-     * @return bool
-     */
-    public function clientesCrescente()
+    public function flush()
     {
-        return asort($this->clientes);
+        try{
+            $stmt = $this->pdo->prepare("select * from Cliente");
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            return $e->getMessage();
+        }
     }
 
-    /**
-     * Ordena em forma descrescente
-     * @return bool
-     */
-    public function clientesDescrescente()
-    {
-        return arsort($this->clientes);
-    }
 
     /**
      * Mostra apenas um cliente
@@ -49,7 +51,14 @@ class BancoClientes
      */
     public function showCliente($key)
     {
-        return $this->clientes[$key];
+        try{
+            $stmt = $this->pdo->prepare("select * from Cliente where id = :id");
+            $stmt->bindParam(':id', $key);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            return $e->getMessage();
+        }
     }
 
 }
