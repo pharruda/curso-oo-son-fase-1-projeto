@@ -25,7 +25,7 @@ class BancoClientes
             $stmt->bindParam(':telefone', $cliente->getTelefone());
             $stmt->bindParam(':tipo', $cliente->getTipo());
             $stmt->bindParam(':grau_importancia', $cliente->getGrauImportancia());
-            $stmt->bindParam(':endereco_cobraca', $cliente->getGrauImportancia());
+            $stmt->bindParam(':endereco_cobraca', $cliente->getEnderecoCobranca());
             $stmt->execute();
         }catch (\PDOException $e) {
             return $e->getMessage();

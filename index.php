@@ -24,28 +24,6 @@ spl_autoload_register(function($className)
 });
 
 $clientes = new SON\Cliente\BancoClientes();
-
-// eu não entendi muito bem se tem que criar um metodo ou é aqui mesmo que coloca
-// as fixtures para povoar o banco de dados.
-
-$fisico = new SON\Cliente\Cliente();
-$fisico->setNome('Paulo ');
-$fisico->setTipo(1);
-$fisico->setEndereco('Rua');
-$fisico->setTelefone('6599545555');
-$fisico->setEnderecoCobranca('endereco cobranca');
-$fisico->setGrauImportancia(5);
-$clientes->persist($fisico);
-
-$juridico = new SON\Cliente\Cliente();
-$juridico->setNome('Empresa');
-$juridico->setTipo(2);
-$juridico->setEndereco('Rua');
-$juridico->setTelefone('64444444445');
-$juridico->setEnderecoCobranca('endereco cobranca empresa');
-$juridico->setGrauImportancia(3);
-$clientes->persist($juridico);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -116,11 +94,6 @@ $clientes->persist($juridico);
             <div class="panel-body">
                 <p><strong>Id :</strong> <?php echo $cli['id']; ?></p>
                 <p><strong>Nome : </strong><?php echo $cli['nome']; ?></p>
-                <?php if($cli['tipo'] == 1): ?>
-                    <p><strong>CPF: </strong><?php echo $cli['cpf_cnpj']; ?></p>
-                <?php elseif($cli['tipo'] == 2):?>
-                    <p><strong>CNPJ: </strong><?php echo $cli['cpf_cnpj']; ?></p>
-                <?php endif; ?>
                 <p><strong>Endereço :</strong> <?php echo $cli['endereco']; ?></p>
                 <p><strong>Telefone :</strong> <?php echo $cli['telefone']; ?></p>
                 <p><strong>Grau Importância :</strong> <?php echo $cli['grau_importancia'];; ?> estrelas</p>
